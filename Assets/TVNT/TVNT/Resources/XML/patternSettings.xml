@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<PatternSettingsContainer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <patternPath>TVNT/TVNT_Samples/Game_3/Resources/Patterns/Game3/</patternPath>
+  <levelTilePath>TVNT/TVNT_Samples/Common/Prefabs/LevelTiles/</levelTilePath>
+  <tiledSize>4</tiledSize>
+  <gridX>9</gridX>
+  <playerYOffset>2</playerYOffset>
+</PatternSettingsContainer>
