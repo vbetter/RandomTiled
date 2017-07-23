@@ -111,7 +111,8 @@ namespace TVNT {
 			Vector3 bottomLeft = new Vector3 (transform.position.x - gridWidth * 0.5f, transform.position.y, (transform.position.z + gridHeight * 0.5f)-zOffset);
 			Vector3 bottomRight = new Vector3(transform.position.x + gridWidth * 0.5f, transform.position.y, (transform.position.z + gridHeight * 0.5f)-zOffset);
 
-			Gizmos.color = Color.white;
+
+            Gizmos.color = Color.white;
 			Gizmos.DrawLine (topLeft, topRight);
 			Gizmos.DrawLine (topLeft, bottomLeft);
 			Gizmos.DrawLine (bottomLeft, bottomRight);

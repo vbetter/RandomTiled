@@ -57,10 +57,11 @@ public class BoardManager : MonoBehaviour {
 	private Vector3 xMaxPosition = Vector3.zero;
 	private float yMax = -float.Epsilon;
 	private Vector3 yMaxPosition = Vector3.zero;
-	private Vector3 cameraXMaxPosition;
-	private Vector3 cameraXMinPosition;
+
 	private float initialCharacterZPosition;
 	private bool boardOverflow = false;
+
+    GameObject _cameraMgr;
 
 	public void SetupScene(int level) {
 		int enemyCount = (int)Mathf.Log (level, 2f);
@@ -125,11 +126,10 @@ public class BoardManager : MonoBehaviour {
 			float halfGridZ = patternScript.gridZ * 0.5f;
 			if (evenGridZ) {
 				//Used to compensate for the padding in the pattern if the gridz is even
-				newPatternStartZ += 0.5f;
-			}
-			newPatternStartZ -= halfGridZ;
-
-			selectedPattern.parent = patternParentContainer;
+                newPatternStartZ -= 0.5f;
+            }
+            newPatternStartZ += halfGridZ;
+            selectedPattern.parent = patternParentContainer;
 			selectedPattern.localPosition = new Vector3 (0, 0, newPatternStartZ * PatternSettings.tiledSize);
 
 			levelTiles = selectedPattern.GetComponentsInChildren<LevelTiles> ();
@@ -146,10 +146,10 @@ public class BoardManager : MonoBehaviour {
 				}
 			}
 
-			newPatternStartZ -= halfGridZ;
-			if (evenGridZ) {
-				newPatternStartZ -= 0.5f;
-			}
+            newPatternStartZ += halfGridZ;
+            if (evenGridZ) {
+                newPatternStartZ -= 0.5f;
+            }
 
 			spawnedPatterns.Add (selectedPattern);
 			spawnedPatternsEntrances.Add (patternScript.topEntrances);
@@ -166,41 +166,7 @@ public class BoardManager : MonoBehaviour {
 				initialCharacterZPosition = startPosition.z;
 			}
 		}
-
-		Camera.main.transform.position += new Vector3(0, 0, newPatternStartZ * 0.5f * PatternSettings.tiledSize);
-
-		//adjust the camera
-		xMax = Camera.main.WorldToViewportPoint (xMaxPosition+new Vector3(1*PatternSettings.tiledSize,0,0)).x;
-
-		if (xMax > 1) {
-			boardOverflow = true;
-		}
-
-		cameraXMaxPosition = Camera.main.transform.position;
-		cameraXMinPosition = Camera.main.transform.position;
-
-		if (boardOverflow) {
-			//fix xmax and ymax
-			Vector3 zVector = Camera.main.WorldToViewportPoint (new Vector3 (0, 0, 1)) - Camera.main.WorldToViewportPoint (Vector3.zero);
-			float xMaxMoveAmount = (xMax - 1f) / zVector.x;
-			cameraXMaxPosition = Camera.main.transform.position + (xMaxMoveAmount * (new Vector3 (0, 0, 1)));
-			cameraXMinPosition = Camera.main.transform.position + (xMaxMoveAmount * (new Vector3 (0, 0, -1)));
-		}
-
-		//fix the y positions
-		Vector3 cameraInitialPosition = Camera.main.transform.position;
-		if (boardOverflow) {
-			Camera.main.transform.position = cameraXMaxPosition;
-		}
-		yMax = Camera.main.WorldToViewportPoint (yMaxPosition + new Vector3(-3*PatternSettings.tiledSize,0,0*PatternSettings.tiledSize)).y;
-		if (yMax > 1) {
-			boardOverflow = true;
-			Vector3 yVector = Camera.main.WorldToViewportPoint (new Vector3 (0, 1, 0)) - Camera.main.WorldToViewportPoint (Vector3.zero);
-			float yMoveAmount = (yMax - 1f) / yVector.y;
-			cameraXMaxPosition += (yMoveAmount * new Vector3 (0, 1, 0));
-			cameraXMinPosition += (yMoveAmount * new Vector3 (0, -1, 0));
-		}
-	}
+    }
 
 	public void ClearBoard() {
 		for (int i = spawnedPatterns.Count - 1; i > -1; i--) {
@@ -236,13 +202,13 @@ public class BoardManager : MonoBehaviour {
 		}
 	}
 
-	private float oldt = 0;
+    private void LateUpdate()
+    {
+        if (activeCharacter && _cameraMgr!=null && _cameraMgr.transform.position!= activeCharacter.position)
+        {
+            Vector3 pos = _cameraMgr.transform.position;
 
-	void FixedUpdate() {
-		if (activeCharacter && boardOverflow) {
-			float t = Mathf.Lerp(oldt,((activeCharacter.position.z-initialCharacterZPosition) / (newPatternStartZ * PatternSettings.tiledSize)), Time.deltaTime*0.75f);
-			oldt = t;
-			Camera.main.transform.position = Vector3.Lerp(cameraXMaxPosition, cameraXMinPosition,t);
-		}
-	}
+            _cameraMgr.transform.position = Vector3.Lerp(pos, activeCharacter.position, Time.deltaTime*2f);
+        }
+    }
 }

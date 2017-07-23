@@ -24,7 +24,7 @@ public class ScreenFader : MonoBehaviour {
 			FadeImage.gameObject.SetActive (false);
 			sceneStarted = true;
 		} else {
-			Application.LoadLevel (loadLevelName);
+            UnityEngine.SceneManagement.SceneManager.LoadScene(loadLevelName);
 		}
 	}
 

@@ -101,17 +101,18 @@ namespace TVNT {
 
 			if (horizontal > 0) {
 				transform.localRotation = Quaternion.Euler (new Vector3 (0, 90f, 0));
-			} else if (horizontal < 0) {
+            } else if (horizontal < 0) {
 				transform.localRotation = Quaternion.Euler (new Vector3 (0, -90f, 0));
-			}
+            }
 
 			if (vertical > 0) {
-				transform.localRotation = Quaternion.Euler (new Vector3 (0, 0f, 0));
-			} else if (vertical < 0) {
-				transform.localRotation = Quaternion.Euler (new Vector3 (0, -180f, 0));
-			}
 
-			boxCollider.enabled = false;
+				transform.localRotation = Quaternion.Euler (new Vector3 (0, 0f, 0));
+            } else if (vertical < 0) {
+				transform.localRotation = Quaternion.Euler (new Vector3 (0, -180f, 0));
+            }
+
+            boxCollider.enabled = false;
 			RaycastHit hitInfo;
 			if (Physics.Linecast (parent.parent.TransformPoint(start + barrierOffset), parent.parent.TransformPoint(end + barrierOffset), out hitInfo, barrierLayerMask) == false) {
 				if (OccupyMoveToTile (parent.parent.TransformPoint(end))) {
@@ -202,7 +203,8 @@ namespace TVNT {
 		/**private IEnumerator ScaleDown() {
 			float timeToScaleDown = moveTime * 0.5f;
 			float _jumpCompression = jumpCompression * (jumpHeight / jumpCompressionBaseHeight);
-			for (float t = 0; t < 1; t += Time.deltaTime / timeToScaleDown) {
+			for (float t = 0; t < 1; t += Time.deltaTime / timeToScaleDown) 
+            {
 				if (jumping == false) {
 					characterBase.localScale = new Vector3 (characterBase.localScale.x, 
 						characterBaseScaleY * (1 - (_jumpCompression * Mathf.Sin (Mathf.PI * t))), 
@@ -214,7 +216,8 @@ namespace TVNT {
 				yield return null;
 			}
 			characterBase.localScale = new Vector3(characterBase.localScale.x, characterBaseScaleY, characterBase.localScale.z);
-		}**/
+		}
+            **/
 
 		private IEnumerator SmoothMovement(Vector3 start, Vector3 end) {
 			Vector3 moveDirection = (end - start);

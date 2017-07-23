@@ -125,7 +125,7 @@ public class Game2 : MonoBehaviour {
 	}
 
 	private void ReloadLevel() {
-		Application.LoadLevel ("Game2");
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Game2");
 	}
 
 	public void SmashedPot(Vector3 position) {
